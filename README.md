@@ -133,4 +133,3 @@ A filled-out engagement context may reveal sensitive information such as domains
 ## License
 
 MIT. See `LICENSE`.
-# authorized-security-engagement-context-template

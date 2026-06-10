@@ -2,18 +2,24 @@
 set -euo pipefail
 
 ROOT="${1:-.}"
+FIND_EXCLUDES=(
+  -path "$ROOT/.git" -o
+  -path "$ROOT/node_modules" -o
+  -path "$ROOT/dist" -o
+  -path "$ROOT/build"
+)
 
 echo "Checking for files that should not be committed..."
 
-if find "$ROOT" -type f \( -name '.env' -o -name '.env.*' \) ! -name '*.example' | grep -q .; then
+if find "$ROOT" \( "${FIND_EXCLUDES[@]}" \) -prune -o -type f \( -name '.env' -o -name '.env.*' \) ! -name '*.example' -print | grep -q .; then
   echo "ERROR: Found .env-like files that are not examples."
-  find "$ROOT" -type f \( -name '.env' -o -name '.env.*' \) ! -name '*.example'
+  find "$ROOT" \( "${FIND_EXCLUDES[@]}" \) -prune -o -type f \( -name '.env' -o -name '.env.*' \) ! -name '*.example' -print
   exit 1
 fi
 
-if find "$ROOT" -type d \( -name 'evidence-private' -o -name 'artifacts-private' -o -name 'logs' \) | grep -q .; then
+if find "$ROOT" \( "${FIND_EXCLUDES[@]}" \) -prune -o -type d \( -name 'evidence-private' -o -name 'artifacts-private' -o -name 'logs' \) -print | grep -q .; then
   echo "ERROR: Found private evidence/log directories. Do not publish these."
-  find "$ROOT" -type d \( -name 'evidence-private' -o -name 'artifacts-private' -o -name 'logs' \)
+  find "$ROOT" \( "${FIND_EXCLUDES[@]}" \) -prune -o -type d \( -name 'evidence-private' -o -name 'artifacts-private' -o -name 'logs' \) -print
   exit 1
 fi
 
