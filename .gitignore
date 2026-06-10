@@ -1,0 +1,16 @@
+# Local notes and filled private material
+*.local.md
+*.private.md
+.env
+.env.*
+!.env.example
+
+# Logs and evidence bundles
+logs/
+evidence-private/
+artifacts-private/
+
+# OS/editor noise
+.DS_Store
+.vscode/
+.idea/
